@@ -1,0 +1,13 @@
+# Secrets — never commit
+google-ads.yaml
+client_secret*.json
+*.token
+
+# Python
+venv/
+__pycache__/
+*.pyc
+.env
+
+# Generated artifacts
+downloads/
