@@ -21,13 +21,17 @@ Already set up. Mention these on camera as "what you need first":
 
 ---
 
-## 1. Create the Python environment (Command Prompt / cmd.exe)
+## 1. Create the Python environment
+
+> Create the venv with **`py -3.12`** explicitly. Plain `python` is ambiguous on
+> this machine (there is also a 3.14) and mixing versions breaks grpc.
+
+**Command Prompt (cmd.exe):**
 
 ```cmd
 cd /d "d:\Google Ads"
 
-:: Create the venv with Python 3.12 EXPLICITLY (plain "python" is ambiguous
-:: on this machine — there is also a 3.14 — and mixing them breaks grpc).
+:: Create the venv with Python 3.12 explicitly
 py -3.12 -m venv venv
 
 :: Activate it (cmd uses activate.bat). Prompt then shows (venv).
@@ -38,9 +42,30 @@ python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
 ```
 
+**PowerShell:**
+
+```powershell
+cd "d:\Google Ads"
+
+# Create the venv with Python 3.12 explicitly
+py -3.12 -m venv venv
+
+# Activate it (PowerShell uses Activate.ps1). Prompt then shows (venv).
+.\venv\Scripts\Activate.ps1
+
+# Install the official google-ads library + dependencies (~1 min first time)
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+```
+
+> If PowerShell blocks activation with an execution-policy error, either run
+> `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass` first, or skip
+> activation and call scripts with the full path `.\venv\Scripts\python.exe <script>.py`.
+>
 > If you ever see `ImportError: cannot import name 'cygrpc'`, the venv was
 > built with a different Python than its packages. Fix: delete and rebuild
-> with one version — `rmdir /s /q venv` then `py -3.12 -m venv venv`.
+> with one version — `rmdir /s /q venv` (cmd) or `Remove-Item -Recurse -Force venv`
+> (PowerShell), then `py -3.12 -m venv venv`.
 
 ---
 
@@ -60,9 +85,10 @@ Edit `google-ads.yaml` and set: `developer_token`, `client_id`,
 
 ## 3. Run the demo (in this order)
 
-With the venv activated (step 1), just use `python`:
+With the venv activated (step 1), just use `python` — the commands are the
+same in both cmd and PowerShell:
 
-```cmd
+```text
 python list_accessible_accounts.py
 python store_assets.py
 python fetch_assets.py
@@ -70,6 +96,10 @@ python use_assets.py
 python make_video_campaigns.py
 python download_assets.py
 ```
+
+> Not activated? Use the full path instead:
+> cmd → `venv\Scripts\python.exe <script>.py`
+> PowerShell → `.\venv\Scripts\python.exe <script>.py`
 
 What each step shows:
 
