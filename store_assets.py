@@ -17,6 +17,8 @@ Usage:
 Edit CUSTOMER_ID below to your test account (digits only, no dashes).
 """
 
+import uuid
+
 import requests
 from google.ads.googleads.client import GoogleAdsClient
 from google.ads.googleads.errors import GoogleAdsException
@@ -92,14 +94,15 @@ def main():
             "https://gaagl.page.link/Eit5"  # Google's sample test image
         )
         image_rn = create_image_asset(
-            client, CUSTOMER_ID, image_bytes, name="My Test Image Asset"
+            client, CUSTOMER_ID, image_bytes,
+            name=f"My Test Image Asset {uuid.uuid4().hex[:6]}"
         )
         print("Image asset:   ", image_rn)
 
         # 3) VIDEO (any public YouTube video id works for testing)
         video_rn = create_youtube_video_asset(
             client, CUSTOMER_ID, youtube_video_id="dQw4w9WgXcQ",
-            name="My Test Video Asset"
+            name=f"My Test Video Asset {uuid.uuid4().hex[:6]}"
         )
         print("Video asset:   ", video_rn)
 

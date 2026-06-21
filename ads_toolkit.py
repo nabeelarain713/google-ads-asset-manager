@@ -202,6 +202,37 @@ def link_asset_to_campaign(client, customer_id, campaign_id, asset_rn,
     ).results[0].resource_name
 
 
+def create_search_campaign(client, customer_id, name,
+                           daily_budget_micros=10_000_000):
+    """Create a paused Search campaign. Returns (resource_name, campaign_id)."""
+    bs = client.get_service("CampaignBudgetService")
+    bop = client.get_type("CampaignBudgetOperation")
+    b = bop.create
+    b.name = f"Search Budget {uuid.uuid4()}"
+    b.delivery_method = client.enums.BudgetDeliveryMethodEnum.STANDARD
+    b.amount_micros = daily_budget_micros
+    budget_rn = bs.mutate_campaign_budgets(
+        customer_id=customer_id, operations=[bop]).results[0].resource_name
+
+    cs = client.get_service("CampaignService")
+    cop = client.get_type("CampaignOperation")
+    c = cop.create
+    c.name = name
+    c.advertising_channel_type = client.enums.AdvertisingChannelTypeEnum.SEARCH
+    c.status = client.enums.CampaignStatusEnum.PAUSED
+    c.manual_cpc = client.get_type("ManualCpc")
+    c.campaign_budget = budget_rn
+    c.network_settings.target_google_search = True
+    c.network_settings.target_search_network = True
+    c.network_settings.target_content_network = False
+    c.contains_eu_political_advertising = (
+        client.enums.EuPoliticalAdvertisingStatusEnum
+        .DOES_NOT_CONTAIN_EU_POLITICAL_ADVERTISING)
+    campaign_rn = cs.mutate_campaigns(
+        customer_id=customer_id, operations=[cop]).results[0].resource_name
+    return campaign_rn, campaign_rn.split("/")[-1]
+
+
 def create_demandgen_video_campaign(
     client, customer_id, *,
     campaign_name,

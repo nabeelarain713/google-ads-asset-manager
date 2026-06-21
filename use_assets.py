@@ -1,55 +1,43 @@
 """
-USE an asset = link a stored asset to something (here, a campaign).
+USE an asset = link it to a campaign.
 
-An asset on its own does nothing until you attach it. You attach it with a
-"link" resource and a `field_type` that says what role it plays
-(SITELINK, YOUTUBE_VIDEO, MARKETING_IMAGE, etc.).
-
-This example links a SITELINK asset to a campaign via CampaignAssetService.
+This script is self-contained and safe to re-run: each run creates a fresh
+sitelink asset and a fresh paused Search campaign, then links them together.
+That avoids "duplicate name" / "link already exists" errors during a demo.
 
 Usage:
     python use_assets.py
-Fill in CUSTOMER_ID, CAMPAIGN_ID, and ASSET_RESOURCE_NAME below
-(get the asset resource name from store_assets.py or fetch_assets.py).
 """
 
-from google.ads.googleads.client import GoogleAdsClient
-from google.ads.googleads.errors import GoogleAdsException
+import uuid
 
-CUSTOMER_ID = "8076057701"            # your TEST client account id, digits only
-CAMPAIGN_ID = "23959904774"           # the paused campaign from create_campaign.py
-ASSET_RESOURCE_NAME = "customers/8076057701/assets/375665857041"  # "Our Menu" sitelink
+import ads_toolkit as t
 
-
-def link_sitelink_to_campaign(client, customer_id, campaign_id, asset_rn):
-    service = client.get_service("CampaignAssetService")
-    op = client.get_type("CampaignAssetOperation")
-
-    campaign_asset = op.create
-    campaign_asset.asset = asset_rn
-    campaign_asset.campaign = client.get_service(
-        "CampaignService"
-    ).campaign_path(customer_id, campaign_id)
-    # field_type must match the asset type you are linking.
-    campaign_asset.field_type = client.enums.AssetFieldTypeEnum.SITELINK
-
-    response = service.mutate_campaign_assets(
-        customer_id=customer_id, operations=[op]
-    )
-    return response.results[0].resource_name
+CUSTOMER_ID = "8076057701"  # your TEST client account id, digits only
 
 
 def main():
-    client = GoogleAdsClient.load_from_storage("google-ads.yaml")
-    try:
-        link_rn = link_sitelink_to_campaign(
-            client, CUSTOMER_ID, CAMPAIGN_ID, ASSET_RESOURCE_NAME
-        )
-        print("Linked! Campaign-asset link:", link_rn)
-    except GoogleAdsException as ex:
-        print(f"Request failed with status {ex.error.code().name}")
-        for error in ex.failure.errors:
-            print(f"  Error: {error.message}")
+    client = t.get_client()
+
+    # 1) Create a sitelink asset (the thing we will "use")
+    sitelink_rn = t.add_sitelink_asset(
+        client, CUSTOMER_ID,
+        link_text="Our Menu",
+        description1="Fresh roasted daily",
+        description2="Dine in or takeaway",
+        final_url="https://example.com",
+    )
+    print("Sitelink asset created:", sitelink_rn)
+
+    # 2) Create a paused Search campaign to attach it to
+    campaign_rn, campaign_id = t.create_search_campaign(
+        client, CUSTOMER_ID, name=f"Search Campaign {uuid.uuid4().hex[:6]}")
+    print("Search campaign created:", campaign_rn)
+
+    # 3) USE the asset: link the sitelink to the campaign
+    link_rn = t.link_asset_to_campaign(
+        client, CUSTOMER_ID, campaign_id, sitelink_rn, "SITELINK")
+    print("Linked sitelink to campaign:", link_rn)
 
 
 if __name__ == "__main__":
