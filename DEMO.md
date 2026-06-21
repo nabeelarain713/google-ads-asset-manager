@@ -21,22 +21,26 @@ Already set up. Mention these on camera as "what you need first":
 
 ---
 
-## 1. Create the Python environment
+## 1. Create the Python environment (Command Prompt / cmd.exe)
 
-```powershell
-# Go to the project folder
-cd "d:\Google Ads"
+```cmd
+cd /d "d:\Google Ads"
 
-# Create a fresh virtual environment
-python -m venv venv
+:: Create the venv with Python 3.12 EXPLICITLY (plain "python" is ambiguous
+:: on this machine — there is also a 3.14 — and mixing them breaks grpc).
+py -3.12 -m venv venv
 
-# Upgrade pip and install the dependencies
-.\venv\Scripts\python.exe -m pip install --upgrade pip
-.\venv\Scripts\python.exe -m pip install -r requirements.txt
+:: Activate it (cmd uses activate.bat). Prompt then shows (venv).
+venv\Scripts\activate.bat
+
+:: Install the official google-ads library + dependencies (~1 min first time)
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
 ```
 
-This installs the official `google-ads` library and its dependencies
-(takes ~1 minute the first time).
+> If you ever see `ImportError: cannot import name 'cygrpc'`, the venv was
+> built with a different Python than its packages. Fix: delete and rebuild
+> with one version — `rmdir /s /q venv` then `py -3.12 -m venv venv`.
 
 ---
 
@@ -56,24 +60,15 @@ Edit `google-ads.yaml` and set: `developer_token`, `client_id`,
 
 ## 3. Run the demo (in this order)
 
-```powershell
-# 1) Prove the credentials work — lists your accessible test accounts
-.\venv\Scripts\python.exe list_accessible_accounts.py
+With the venv activated (step 1), just use `python`:
 
-# 2) STORE assets (text, image, video, sitelink)
-.\venv\Scripts\python.exe store_assets.py
-
-# 3) FETCH / list all assets in the account
-.\venv\Scripts\python.exe fetch_assets.py
-
-# 4) USE an asset — creates a Search campaign and links a sitelink to it
-.\venv\Scripts\python.exe use_assets.py
-
-# 5) CREATE VIDEO CAMPAIGNS — Demand Gen campaigns using your YouTube video
-.\venv\Scripts\python.exe make_video_campaigns.py
-
-# 6) DOWNLOAD assets locally (images -> .\downloads, video links -> a file)
-.\venv\Scripts\python.exe download_assets.py
+```cmd
+python list_accessible_accounts.py
+python store_assets.py
+python fetch_assets.py
+python use_assets.py
+python make_video_campaigns.py
+python download_assets.py
 ```
 
 What each step shows:
