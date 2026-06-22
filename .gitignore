@@ -2,6 +2,7 @@
 google-ads.yaml
 client_secret*.json
 *.token
+youtube_token.json
 
 # Python
 venv/

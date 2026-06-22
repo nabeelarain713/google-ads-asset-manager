@@ -5,3 +5,8 @@
 #     pip install -r requirements-optional.txt
 # High-quality merges also need ffmpeg installed and on your PATH.
 yt-dlp>=2024.1.1
+
+# YouTube Data API v3 — upload your own videos to your own channel,
+# used by generate_youtube_token.py and upload_youtube_video.py.
+google-api-python-client>=2.100.0
+google-auth-httplib2>=0.2.0
