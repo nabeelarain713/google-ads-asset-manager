@@ -22,6 +22,7 @@ Usage:
 """
 
 import os
+import shutil
 import sys
 
 OUT_DIR = "downloads/videos"
@@ -49,12 +50,18 @@ def download(urls, out_dir=OUT_DIR):
         sys.exit("yt-dlp is not installed. Run:  pip install yt-dlp")
 
     os.makedirs(out_dir, exist_ok=True)
-    opts = {
-        "outtmpl": os.path.join(out_dir, "%(id)s.%(ext)s"),
-        # Best video+audio, merged to mp4 (needs ffmpeg). Fallback: best single file.
-        "format": "bestvideo+bestaudio/best",
-        "merge_output_format": "mp4",
-    }
+    opts = {"outtmpl": os.path.join(out_dir, "%(id)s.%(ext)s")}
+
+    if shutil.which("ffmpeg"):
+        # Best quality: download separate video+audio and merge to mp4.
+        opts["format"] = "bestvideo+bestaudio/best"
+        opts["merge_output_format"] = "mp4"
+    else:
+        # No ffmpeg: grab the best single pre-merged file (no merge needed).
+        print("Note: ffmpeg not found — downloading best single-file format. "
+              "Install ffmpeg for higher-resolution merged downloads.")
+        opts["format"] = "best"
+
     with yt_dlp.YoutubeDL(opts) as ydl:
         ydl.download(urls)
 
