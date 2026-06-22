@@ -19,20 +19,20 @@ CUSTOMER_ID = "8076057701"
 CAMPAIGNS = [
     {
         "campaign_name": "DG Video - Brand Awareness",
-        "youtube_video_id": "dQw4w9WgXcQ",
+        "youtube_video_id": "wNFpIiWqTX0",
         "business_name": "Revonix",
         "headlines": ["Automate Everything", "Work Smarter"],
         "descriptions": ["AI that saves you time.", "Built for your business."],
-        "final_url": "https://example.com/brand",
+        "final_url": "https://www.revonix.co/",
     },
     {
         "campaign_name": "DG Video - Product Launch",
-        "youtube_video_id": "dQw4w9WgXcQ",
+        "youtube_video_id": "wNFpIiWqTX0",
         "business_name": "Revonix",
         "headlines": ["New: AI Workflows", "Launch Day"],
         "long_headlines": ["Introducing our new AI automation platform"],
         "descriptions": ["See what's new.", "Try it today."],
-        "final_url": "https://example.com/launch",
+        "final_url": "https://www.revonix.co/",
     },
 ]
 
