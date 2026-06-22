@@ -1,0 +1,7 @@
+# Optional dependencies — NOT required for the Google Ads API itself.
+#
+# yt-dlp: download YouTube video FILES locally (the Ads API only gives links).
+# Use only for videos you own or have rights to. Install with:
+#     pip install -r requirements-optional.txt
+# High-quality merges also need ffmpeg installed and on your PATH.
+yt-dlp>=2024.1.1

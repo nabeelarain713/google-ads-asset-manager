@@ -23,6 +23,7 @@ This project gives you three building blocks:
 | `ads_toolkit.py`            | Reusable library (store/fetch/download/use)   |
 | `make_video_campaigns.py`   | Build many Demand Gen video campaigns via the toolkit |
 | `download_assets.py`        | Save image files to ./downloads; export video YouTube links |
+| `download_youtube_videos.py` | Optional: download YouTube **video files** with yt-dlp (your own videos only) |
 
 ### Notes on video
 
@@ -32,6 +33,10 @@ This project gives you three building blocks:
   (what `ads_toolkit` builds) to serve video programmatically.
 * Download saves **image files**; for video the API exposes only the
   **YouTube link**, not the raw file.
+* To get a video **file** locally, use `download_youtube_videos.py` (needs the
+  optional `yt-dlp` dependency: `pip install -r requirements-optional.txt`).
+  **Only download videos you own or have rights to** — downloading other
+  people's videos violates YouTube's Terms of Service.
 
 ---
 
