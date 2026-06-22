@@ -38,6 +38,13 @@ This project gives you three building blocks:
   **Only download videos you own or have rights to** — downloading other
   people's videos violates YouTube's Terms of Service.
 
+### More guides
+
+* **`YOUTUBE.md`** — full local-video → YouTube → video-campaign workflow (upload,
+  make public, use in Ads, download) with all cmd commands.
+* **`DEMO.md`** — recording walkthrough: create the environment → run the demo →
+  verify in the test account (cmd + PowerShell).
+
 ---
 
 ## 1. Credentials you need (do these in the browser first)
