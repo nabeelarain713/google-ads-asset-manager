@@ -202,5 +202,6 @@ test client **8076057701** → **Campaigns** → open a Demand Gen campaign →
 | Uploaded video is **private** | Cloud project not audited | make it public in Studio, or get audited |
 | Video can't be used in Ads | video is private | set it Public/Unlisted first |
 | Download fails: "ffmpeg is not installed" | merge needs ffmpeg | install ffmpeg + PATH, or it auto-falls back to a single file |
+| Downloaded video plays but has **no sound** | YouTube's best audio is **Opus**, and Opus-in-MP4 won't play in many players | the script now prefers **AAC** audio (`bestaudio[ext=m4a]`) for a universally-playable MP4 — re-download to fix an old file |
 | Ad disapproved: `DESTINATION_NOT_WORKING` | final URL not live | use a working URL (builder also ignores this for test URLs) |
 | `DUPLICATE_CAMPAIGN_NAME` | name already used | the script auto-adds a unique suffix |
