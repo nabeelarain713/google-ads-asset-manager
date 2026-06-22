@@ -53,8 +53,11 @@ def download(urls, out_dir=OUT_DIR):
     opts = {"outtmpl": os.path.join(out_dir, "%(id)s.%(ext)s")}
 
     if shutil.which("ffmpeg"):
-        # Best quality: download separate video+audio and merge to mp4.
-        opts["format"] = "bestvideo+bestaudio/best"
+        # Prefer H.264 video + AAC (m4a) audio so the merged MP4 plays in every
+        # player. (Default "bestaudio" is often Opus, which is valid but many
+        # players can't decode Opus inside an MP4 -> video plays with no sound.)
+        opts["format"] = (
+            "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best")
         opts["merge_output_format"] = "mp4"
     else:
         # No ffmpeg: grab the best single pre-merged file (no merge needed).
